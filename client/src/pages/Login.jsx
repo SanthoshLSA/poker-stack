@@ -17,7 +17,11 @@ export default function Login() {
     try {
       await login(form)
     } catch (err) {
-      setError(err.response?.data?.error || 'Login failed. Please try again.')
+      if (!err.response) {
+        setError('Cannot connect to server. Make sure the backend is running.')
+      } else {
+        setError(err.response?.data?.error || 'Login failed. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
@@ -29,7 +33,7 @@ export default function Login() {
       <div className="auth-card card animate-in">
         <div className="card-body">
           <div className="auth-header">
-            <span className="auth-logo">🃏</span>
+            <span className="auth-logo" style={{ fontFamily: 'var(--font-display)', fontSize: '40px', color: 'var(--color-gold)', textShadow: '0 0 20px rgba(201,168,76,0.5)' }}>♠</span>
             <h1 className="auth-title">Welcome Back</h1>
             <p className="auth-subtitle">Take your seat at the table</p>
           </div>
@@ -46,7 +50,7 @@ export default function Login() {
               fontFamily: 'var(--font-display)',
               fontWeight: '600'
             }}>
-              ✕ {error}
+              {error}
             </div>
           )}
 
@@ -87,7 +91,7 @@ export default function Login() {
               style={{ marginTop: '8px' }}
               disabled={loading}
             >
-              {loading ? '🔄 Dealing in...' : '♠ Login to PokerStack'}
+              {loading ? 'Signing in...' : 'Login to PokerStack'}
             </button>
           </form>
 
@@ -96,7 +100,7 @@ export default function Login() {
           <div style={{ textAlign: 'center', marginTop: '16px', fontSize: '14px', color: 'var(--text-secondary)' }}>
             New to the table?{' '}
             <Link to="/register" style={{ color: 'var(--color-gold)', fontWeight: '700', fontFamily: 'var(--font-display)' }}>
-              Create Account ♠
+              Create Account
             </Link>
           </div>
         </div>

@@ -71,7 +71,7 @@ export default function Groups() {
       {toast && (
         <div className="toast-container">
           <div className={`toast toast-${toast.type}`}>
-            {toast.type === 'success' ? '✓' : '✕'} {toast.msg}
+            {toast.type === 'success' ? 'v' : 'x'} {toast.msg}
           </div>
         </div>
       )}
@@ -126,7 +126,7 @@ export default function Groups() {
               </div>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button type="submit" className="btn btn-primary" disabled={submitLoading}>
-                  {submitLoading ? '🔄 Creating...' : '✓ Create Group'}
+                  {submitLoading ? 'Creating...' : 'Create Group'}
                 </button>
                 <button type="button" className="btn btn-ghost" onClick={() => setShowCreate(false)}>Cancel</button>
               </div>
@@ -166,7 +166,7 @@ export default function Groups() {
         </div>
       ) : groups.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '80px 20px', color: 'var(--text-muted)' }}>
-          <div style={{ fontSize: '56px', marginBottom: '20px' }}>♥</div>
+          <div style={{ fontSize: '32px', marginBottom: '20px', color: 'var(--color-gold)' }}>♥</div>
           <p style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: '700', color: 'var(--text-secondary)', marginBottom: '8px' }}>
             No groups yet
           </p>
@@ -185,19 +185,19 @@ export default function Groups() {
                       </h3>
                       {g.description && <p style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>{g.description}</p>}
                     </div>
-                    <span style={{ fontSize: '24px' }}>♥</span>
+                    <span style={{ fontSize: '20px', color: 'var(--color-gold)' }}>♥</span>
                   </div>
 
                   {/* Invite code */}
                   <div className="group-invite-code" style={{ marginBottom: '14px' }}>
                     <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-display)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Code:</span>
                     {g.inviteCode}
-                    <span style={{ fontSize: '12px', color: 'var(--text-muted)', marginLeft: 'auto', letterSpacing: '0' }}>📋</span>
+                    <span style={{ fontSize: '12px', color: 'var(--text-muted)', marginLeft: 'auto', letterSpacing: '0' }}>Copy</span>
                   </div>
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', color: 'var(--text-muted)' }}>
-                    <span>👥 {g.members?.length || 0} members</span>
-                    <span>🎮 {g.totalSessions || 0} sessions</span>
+                    <span>Members: {g.members?.length || 0}</span>
+                    <span>Sessions: {g.totalSessions || 0}</span>
                     <span style={{ fontFamily: 'var(--font-display)', fontSize: '11px', color: 'var(--color-gold)' }}>
                       {g.creator?._id === g.creator ? 'Owner' : ''}
                     </span>

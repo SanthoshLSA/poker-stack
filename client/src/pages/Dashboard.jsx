@@ -122,7 +122,7 @@ export default function Dashboard() {
           {activeSessions.length > 0 && (
             <section style={{ marginBottom: '32px' }}>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '16px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', marginBottom: '14px' }}>
-                🟢 Active Sessions
+                Active Sessions
               </h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '14px' }}>
                 {activeSessions.map(s => (
@@ -135,7 +135,7 @@ export default function Dashboard() {
           {pastSessions.length > 0 && (
             <section>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '16px', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', marginBottom: '14px' }}>
-                📋 Past Sessions
+                Past Sessions
               </h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '14px' }}>
                 {pastSessions.map(s => (
@@ -147,7 +147,7 @@ export default function Dashboard() {
 
           {sessions.length === 0 && (
             <div style={{ textAlign: 'center', padding: '80px 20px', color: 'var(--text-muted)' }}>
-              <div style={{ fontSize: '56px', marginBottom: '20px' }}>🃏</div>
+              <div style={{ fontSize: '32px', marginBottom: '20px', color: 'var(--color-gold)' }}>♠</div>
               <p style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-secondary)', marginBottom: '8px' }}>
                 No sessions yet
               </p>

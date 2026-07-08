@@ -2,12 +2,12 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 const features = [
-  { icon: '🏦', title: 'Bank Integrity', desc: 'Total money is always conserved. Initial bank = all player stacks + remaining bank, at every moment.' },
-  { icon: '🔄', title: 'Live Transactions', desc: 'Admin records buy-ins and transfers in real-time. Every move is logged with a full audit trail.' },
-  { icon: '🏆', title: 'Leaderboard', desc: 'Track profits and losses across all sessions. Group-specific leaderboards for private circles.' },
-  { icon: '🔒', title: 'Private Sessions', desc: 'Sessions protected by room codes. Groups by invite-only. Your poker night stays private.' },
-  { icon: '👥', title: 'Group Management', desc: 'Create groups with friends. Sessions tied to groups get their own leaderboard.' },
-  { icon: '📊', title: 'Full History', desc: 'Every transaction logged. Review any session\'s complete history after it ends.' }
+  { icon: '♠', title: 'Bank Integrity', desc: 'Total money is always conserved. Initial bank = all player stacks + remaining bank, at every moment.' },
+  { icon: '♦', title: 'Live Transactions', desc: 'Admin records buy-ins and transfers in real-time. Every move is logged with a full audit trail.' },
+  { icon: '♥', title: 'Leaderboard', desc: 'Track profits and losses across all sessions. Group-specific leaderboards for private circles.' },
+  { icon: '♣', title: 'Private Sessions', desc: 'Sessions protected by room codes. Groups by invite-only. Your poker night stays private.' },
+  { icon: '♠', title: 'Group Management', desc: 'Create groups with friends. Sessions tied to groups get their own leaderboard.' },
+  { icon: '♦', title: 'Full History', desc: 'Every transaction logged. Review any session\'s complete history after it ends.' }
 ]
 
 export default function Landing() {
@@ -44,15 +44,15 @@ export default function Landing() {
           <div className="landing-actions">
             {user ? (
               <Link to="/dashboard" className="btn btn-primary btn-lg">
-                Enter Lobby ♠
+                Enter Lobby
               </Link>
             ) : (
               <>
                 <Link to="/register" className="btn btn-primary btn-lg">
-                  Join the Table ♠
+                  Join the Table
                 </Link>
                 <Link to="/login" className="btn btn-outline btn-lg">
-                  Login ♦
+                  Login
                 </Link>
               </>
             )}
@@ -70,7 +70,7 @@ export default function Landing() {
           }}>
             {[
               { val: '100%', label: 'Money Balanced' },
-              { val: '∞', label: 'Transactions Logged' },
+              { val: 'All', label: 'Transactions Logged' },
               { val: '0', label: 'Disputes' }
             ].map(s => (
               <div key={s.label} style={{ textAlign: 'center' }}>
@@ -119,7 +119,7 @@ export default function Landing() {
             Free forever. No rake. Just pure poker management.
           </p>
           <Link to="/register" className="btn btn-primary btn-lg">
-            Create Free Account ♠
+            Create Free Account
           </Link>
         </section>
       )}

@@ -57,13 +57,13 @@ export default function GroupDetail() {
           <h1 className="page-title">{group.name}</h1>
           {group.description && <p className="text-secondary" style={{ marginTop: '6px', fontSize: '14px' }}>{group.description}</p>}
           <p style={{ marginTop: '6px', fontSize: '13px', color: 'var(--text-muted)', fontFamily: 'var(--font-display)' }}>
-            Created by {group.creator?.username} • {group.members?.length || 0} members
+            Created by {group.creator?.username} * {group.members?.length || 0} members
           </p>
         </div>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <div className="group-invite-code" style={{ cursor: 'pointer', fontSize: '14px', letterSpacing: '0.2em', padding: '8px 14px' }} onClick={copyCode} title="Click to copy">
             {group.inviteCode}
-            <span style={{ fontSize: '14px', color: 'var(--text-muted)', letterSpacing: '0' }}>{copied ? ' ✓' : ' 📋'}</span>
+            <span style={{ fontSize: '14px', color: 'var(--text-muted)', letterSpacing: '0' }}>{copied ? ' v' : ' Copy'}</span>
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function GroupDetail() {
                   <tr key={p.userId}>
                     <td className="rank-cell">
                       <span className={`rank-${i + 1}`}>
-                        {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`}
+                        {i === 0 ? '1st' : i === 1 ? '2nd' : i === 2 ? '3rd' : `#${i + 1}`}
                       </span>
                     </td>
                     <td>
@@ -135,7 +135,7 @@ export default function GroupDetail() {
                     </td>
                     <td style={{ textAlign: 'right', fontFamily: 'var(--font-display)', fontWeight: '800', fontSize: '16px', color: p.isPrivate && p.userId !== user._id ? 'var(--text-muted)' : p.totalProfit >= 0 ? '#22c55e' : '#ef4444' }}>
                       {p.isPrivate && p.userId !== user._id
-                        ? '🔒 Private'
+                        ? 'Private'
                         : (p.totalProfit >= 0 ? '+' : '') + formatINR(p.totalProfit)}
                     </td>
                     <td style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{p.sessionsPlayed}</td>
@@ -166,7 +166,7 @@ export default function GroupDetail() {
                     {m._id === user._id && <span style={{ color: 'var(--color-gold)', fontSize: '11px', marginLeft: '6px' }}>(You)</span>}
                   </div>
                   <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '3px' }}>
-                    {isCreator && m._id === group.creator?._id ? '👑 Creator' : '♠ Member'}
+                    {isCreator && m._id === group.creator?._id ? 'Owner' : 'Member'}
                   </div>
                 </div>
               </div>

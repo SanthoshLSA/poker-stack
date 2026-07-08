@@ -66,7 +66,7 @@ export default function Profile() {
       {toast && (
         <div className="toast-container">
           <div className={`toast toast-${toast.type}`}>
-            {toast.type === 'success' ? '✓' : '✕'} {toast.msg}
+            {toast.type === 'success' ? 'v' : 'x'} {toast.msg}
           </div>
         </div>
       )}
@@ -127,7 +127,7 @@ export default function Profile() {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', marginBottom: '24px' }}>
             <div>
               <div style={{ fontFamily: 'var(--font-display)', fontWeight: '700', fontSize: '14px', color: 'var(--text-primary)' }}>
-                🔒 Private Mode
+                Private Mode
               </div>
               <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
                 Hide your profit/loss from the global leaderboard
@@ -165,7 +165,7 @@ export default function Profile() {
             onClick={handleSaveProfile}
             disabled={savingProfile}
           >
-            {savingProfile ? '🔄 Saving...' : '✓ Save Profile Changes'}
+            {savingProfile ? 'Saving...' : 'Save Profile Changes'}
           </button>
         </div>
       </div>
@@ -209,7 +209,7 @@ export default function Profile() {
               />
             </div>
             <button type="submit" className="btn btn-outline w-full" disabled={changingPw}>
-              {changingPw ? '🔄 Changing...' : '♦ Change Password'}
+              {changingPw ? 'Changing...' : 'Change Password'}
             </button>
           </form>
         </div>
@@ -223,7 +223,7 @@ export default function Profile() {
             {[
               { label: 'Sessions Played', val: user.sessionsPlayed || 0, color: 'var(--color-gold)' },
               { label: 'Sessions Won', val: user.sessionsWon || 0, color: '#22c55e' },
-              { label: 'Win Rate', val: user.sessionsPlayed ? Math.round((user.sessionsWon / user.sessionsPlayed) * 100) + '%' : '—', color: 'var(--text-secondary)' },
+              { label: 'Win Rate', val: user.sessionsPlayed ? Math.round((user.sessionsWon / user.sessionsPlayed) * 100) + '%' : '-', color: 'var(--text-secondary)' },
               { label: 'Total P/L', val: (user.totalProfit >= 0 ? '+' : '') + '₹' + Math.abs(user.totalProfit || 0).toLocaleString('en-IN'), color: user.totalProfit >= 0 ? '#22c55e' : '#ef4444' }
             ].map(s => (
               <div key={s.label} style={{ textAlign: 'center', padding: '16px', background: 'rgba(255,255,255,0.02)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)' }}>

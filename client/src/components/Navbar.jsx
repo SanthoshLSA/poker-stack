@@ -30,7 +30,7 @@ export default function Navbar() {
         <div className="navbar-inner">
           {/* Logo */}
           <Link to={user ? '/dashboard' : '/'} className="navbar-logo">
-            <span className="navbar-logo-icon">🃏</span>
+            <span className="navbar-logo-icon">♠</span>
             POKER<span style={{ color: 'var(--color-gold)' }}>STACK</span>
           </Link>
 
@@ -68,7 +68,7 @@ export default function Navbar() {
             )}
             {user && (
               <button className="navbar-menu-btn" onClick={() => setMenuOpen(o => !o)} aria-label="Menu">
-                {menuOpen ? '✕' : '☰'}
+                {menuOpen ? 'x' : '='}
               </button>
             )}
           </div>
@@ -78,7 +78,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {user && (
         <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
-          <Link to="/dashboard" className="mobile-menu-link">🃏 Dashboard</Link>
+          <Link to="/dashboard" className="mobile-menu-link">♠ Dashboard</Link>
           <Link to="/session/create" className="mobile-menu-link">♠ New Session</Link>
           <Link to="/groups" className="mobile-menu-link">♥ Groups</Link>
           <Link to="/leaderboard" className="mobile-menu-link">♦ Leaderboard</Link>
@@ -88,7 +88,7 @@ export default function Navbar() {
             className="mobile-menu-link"
             style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444', fontFamily: 'var(--font-display)', fontSize: '14px', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.1em' }}
           >
-            ✕ Exit Game
+            x Exit Game
           </button>
         </div>
       )}

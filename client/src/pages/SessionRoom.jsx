@@ -67,9 +67,9 @@ export default function SessionRoom() {
 
   if (error) return (
     <div className="page" style={{ textAlign: 'center', paddingTop: '80px' }}>
-      <div style={{ fontSize: '48px', marginBottom: '16px' }}>⚠️</div>
+      <div style={{ fontSize: '24px', marginBottom: '16px', color: '#ef4444' }}>[!]</div>
       <h2 style={{ fontFamily: 'var(--font-display)', color: '#ef4444', marginBottom: '8px' }}>{error}</h2>
-      <button className="btn btn-outline" onClick={() => navigate('/dashboard')}>← Back to Dashboard</button>
+      <button className="btn btn-outline" onClick={() => navigate('/dashboard')}>Back to Dashboard</button>
     </div>
   )
 
@@ -93,7 +93,7 @@ export default function SessionRoom() {
       {toast && (
         <div className="toast-container">
           <div className={`toast toast-${toast.type}`}>
-            {toast.type === 'success' ? '✓' : '✕'} {toast.msg}
+            {toast.type === 'success' ? 'v' : 'x'} {toast.msg}
           </div>
         </div>
       )}
@@ -102,7 +102,7 @@ export default function SessionRoom() {
       <div className="session-header">
         <div>
           <div className="section-badge" style={{ marginBottom: '8px' }}>
-            {isActive ? <span className="badge badge-active">● LIVE</span> : <span className="badge badge-gray">✓ ENDED</span>}
+            {isActive ? <span className="badge badge-active">Live</span> : <span className="badge badge-gray">Ended</span>}
           </div>
           <h1 className="session-name">{session.name}</h1>
           {session.group && (
@@ -120,14 +120,14 @@ export default function SessionRoom() {
             <div className="room-code-label">Room Code</div>
             <div className="room-code-value">{session.roomCode}</div>
           </div>
-          <span style={{ color: 'var(--text-muted)', fontSize: '16px' }}>📋</span>
+          <span style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Copy</span>
         </div>
       </div>
 
       {/* Bank + Conservation */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '24px' }}>
         <div className="bank-display">
-          <div className="bank-label">💰 Current Bank</div>
+          <div className="bank-label">Current Bank</div>
           <AnimatedCounter
             value={session.currentBank}
             prefix="₹"
@@ -140,18 +140,18 @@ export default function SessionRoom() {
 
         <div className="card" style={{ padding: '20px 24px', textAlign: 'center' }}>
           <div className="bank-label" style={{ color: isBalanced ? 'var(--text-muted)' : '#ef4444' }}>
-            {isBalanced ? '✓ Conservation Check' : '⚠ Conservation Error!'}
+            {isBalanced ? 'Conservation Check' : 'Conservation Error!'}
           </div>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: '900', color: isBalanced ? '#22c55e' : '#ef4444', marginTop: '8px' }}>
             ₹{Number(totalInPlay).toLocaleString('en-IN')}
           </div>
           <div style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '6px', fontFamily: 'var(--font-display)' }}>
-            Total in play {isBalanced ? '= Initial ✓' : '≠ Initial ⚠'}
+            Total in play {isBalanced ? '= Initial' : 'mismatch'}
           </div>
         </div>
 
         <div className="card" style={{ padding: '20px 24px', textAlign: 'center' }}>
-          <div className="bank-label">👥 Players</div>
+          <div className="bank-label">Players</div>
           <div style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: '900', color: 'var(--color-gold)', marginTop: '8px' }}>
             {session.players.length}
           </div>
@@ -168,7 +168,7 @@ export default function SessionRoom() {
             ♠ Record Transaction
           </button>
           <button className="btn btn-danger" onClick={() => setShowEndModal(true)}>
-            ✕ End Session
+            End Session
           </button>
         </div>
       )}
@@ -179,7 +179,7 @@ export default function SessionRoom() {
         onClick={loadHistory}
         style={{ marginBottom: '20px' }}
       >
-        📋 View Transaction History
+        View Transaction History
       </button>
 
       {/* Auto-refresh indicator */}
@@ -257,7 +257,7 @@ export default function SessionRoom() {
             setSession(res.session)
             setShowTxModal(false)
             if (res.warnings?.length > 0) {
-              showToast('⚠ ' + res.warnings[0], 'warning')
+              showToast('! ' + res.warnings[0], 'warning')
             } else {
               showToast('Transaction recorded!', 'success')
             }
@@ -278,44 +278,6 @@ export default function SessionRoom() {
           }}
           onError={(msg) => showToast(msg, 'error')}
         />
-      )}
-
-      {/* History Modal */}
-      {showHistory && (
-        <div className="modal-overlay" onClick={() => setShowHistory(false)}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2 className="modal-title">📋 Transaction History</h2>
-              <button className="modal-close" onClick={() => setShowHistory(false)}>✕</button>
-            </div>
-            <div className="modal-body">
-              {txHistory.length === 0 ? (
-                <p style={{ color: 'var(--text-muted)', textAlign: 'center', padding: '20px' }}>No transactions yet.</p>
-              ) : (
-                <div className="tx-log">
-                  {[...txHistory].reverse().map((tx, i) => (
-                    <div key={i} className="tx-item">
-                      <span className="tx-icon">
-                        {tx.type === 'buyin' ? '♠' : tx.type === 'rebuy' ? '♦' : '♥'}
-                      </span>
-                      <div className="tx-details">
-                        <div className="tx-label">
-                          {tx.fromUsername} → {tx.toUsername}
-                        </div>
-                        <div className="tx-meta">
-                          {tx.type.replace('_', ' ').toUpperCase()} •{' '}
-                          {new Date(tx.timestamp).toLocaleString('en-IN', { hour12: true, hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' })}
-                          {tx.note && ` • ${tx.note}`}
-                        </div>
-                      </div>
-                      <div className="tx-amount">{formatINR(tx.amount)}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
       )}
     </div>
   )
@@ -375,12 +337,12 @@ function TransactionModal({ session, preSelectedTo, onClose, onSuccess, onError 
       <div className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <h2 className="modal-title">♠ Record Transaction</h2>
-          <button className="modal-close" onClick={onClose}>✕</button>
+          <button className="modal-close" onClick={onClose}>x</button>
         </div>
         <div className="modal-body">
           {warnings.map((w, i) => (
             <div key={i} style={{ padding: '10px 14px', background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)', borderRadius: 'var(--radius-md)', color: 'var(--color-gold)', fontSize: '13px', marginBottom: '14px', fontFamily: 'var(--font-display)' }}>
-              ⚠ {w}
+              ! {w}
             </div>
           ))}
 
@@ -390,8 +352,8 @@ function TransactionModal({ session, preSelectedTo, onClose, onSuccess, onError 
               <label className="form-label">Money From</label>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 {[
-                  { val: 'bank', label: '🏦 Bank', sublabel: `₹${Number(session.currentBank).toLocaleString('en-IN')} remaining` },
-                  { val: 'player', label: '👤 Player', sublabel: 'Chip transfer' }
+                  { val: 'bank', label: 'Bank', sublabel: `₹${Number(session.currentBank).toLocaleString('en-IN')} remaining` },
+                  { val: 'player', label: 'Player', sublabel: 'Chip transfer' }
                 ].map(opt => (
                   <label key={opt.val} style={{
                     display: 'flex', flexDirection: 'column', gap: '4px', padding: '12px 14px',
@@ -411,7 +373,7 @@ function TransactionModal({ session, preSelectedTo, onClose, onSuccess, onError 
               <div className="form-group">
                 <label className="form-label">Source Player ♠</label>
                 <select name="fromUserId" className="form-input form-select" value={form.fromUserId} onChange={handleChange}>
-                  <option value="">— Select player —</option>
+                  <option value="">- Select player -</option>
                   {session.players.map(p => (
                     <option key={p.user} value={p.user}>
                       {p.username} (Stack: ₹{Number(p.currentStack).toLocaleString('en-IN')})
@@ -425,7 +387,7 @@ function TransactionModal({ session, preSelectedTo, onClose, onSuccess, onError 
             <div className="form-group">
               <label className="form-label">Recipient Player ♥</label>
               <select name="toUserId" className="form-input form-select" value={form.toUserId} onChange={handleChange}>
-                <option value="">— Select player —</option>
+                <option value="">- Select player -</option>
                 {session.players
                   .filter(p => form.fromType === 'bank' || p.user !== form.fromUserId)
                   .map(p => (
@@ -469,20 +431,14 @@ function TransactionModal({ session, preSelectedTo, onClose, onSuccess, onError 
                 maxLength={100}
               />
             </div>
-
-            {/* Preview */}
-            {form.amount && form.toUserId && (
-              <div style={{ padding: '12px 14px', background: 'rgba(201,168,76,0.06)', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)', marginBottom: '16px', fontSize: '13px', fontFamily: 'var(--font-display)', fontWeight: '600' }}>
-                {form.fromType === 'bank' ? '🏦 Bank' : (fromPlayer?.username || '?')} → {toPlayer?.username || '?'}: ₹{Number(form.amount || 0).toLocaleString('en-IN')}
-              </div>
-            )}
           </form>
-        </div>
-        <div className="modal-footer">
-          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
-          <button className="btn btn-primary" onClick={handleSubmit} disabled={loading}>
-            {loading ? '🔄 Recording...' : '✓ Confirm Transaction'}
-          </button>
+
+          <div className="modal-actions" style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+            <button className="btn btn-ghost flex-1" onClick={onClose}>Cancel</button>
+            <button className="btn btn-primary flex-1" onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Recording...' : 'Confirm Transaction'}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -517,8 +473,8 @@ function EndSessionModal({ session, onClose, onSuccess, onError }) {
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: '580px' }}>
         <div className="modal-header">
-          <h2 className="modal-title">✕ End Session</h2>
-          <button className="modal-close" onClick={onClose}>✕</button>
+          <h2 className="modal-title">End Session</h2>
+          <button className="modal-close" onClick={onClose}>x</button>
         </div>
         <div className="modal-body">
           <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '20px', fontFamily: 'var(--font-display)' }}>
@@ -560,11 +516,11 @@ function EndSessionModal({ session, onClose, onSuccess, onError }) {
           {/* Conservation check */}
           <div style={{ padding: '12px 14px', background: isBalanced ? 'rgba(34,197,94,0.08)' : 'rgba(239,68,68,0.08)', border: `1px solid ${isBalanced ? 'rgba(34,197,94,0.2)' : 'rgba(239,68,68,0.2)'}`, borderRadius: 'var(--radius-md)', fontSize: '13px', fontFamily: 'var(--font-display)', fontWeight: '600' }}>
             {isBalanced ? (
-              <span style={{ color: '#22c55e' }}>✓ Conservation check passed: ₹{Number(totalFinal + session.currentBank).toLocaleString('en-IN')} = ₹{Number(session.initialBank).toLocaleString('en-IN')}</span>
+              <span style={{ color: '#22c55e' }}>Conservation check passed: ₹{Number(totalFinal + session.currentBank).toLocaleString('en-IN')} = ₹{Number(session.initialBank).toLocaleString('en-IN')}</span>
             ) : (
               <span style={{ color: '#ef4444' }}>
-                ⚠ Mismatch! Total final + bank = ₹{Number(totalFinal + session.currentBank).toLocaleString('en-IN')} vs Initial ₹{Number(session.initialBank).toLocaleString('en-IN')}
-                {' '}(Δ ₹{Math.abs(totalFinal + session.currentBank - session.initialBank).toLocaleString('en-IN')})
+                Mismatch! Total final + bank = ₹{Number(totalFinal + session.currentBank).toLocaleString('en-IN')} vs Initial ₹{Number(session.initialBank).toLocaleString('en-IN')}
+                {' '}(diff ₹{Math.abs(totalFinal + session.currentBank - session.initialBank).toLocaleString('en-IN')})
               </span>
             )}
           </div>
@@ -576,7 +532,7 @@ function EndSessionModal({ session, onClose, onSuccess, onError }) {
             onClick={handleSubmit}
             disabled={loading}
           >
-            {loading ? '🔄 Ending...' : '✕ End Session & Save Results'}
+            {loading ? 'Ending...' : 'End Session & Save Results'}
           </button>
         </div>
       </div>

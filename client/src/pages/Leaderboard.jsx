@@ -37,7 +37,7 @@ export default function Leaderboard() {
           <div className="section-badge">♦ Global Leaderboard</div>
           <h1 className="page-title">Hall of Fame</h1>
           <p className="text-secondary" style={{ marginTop: '6px', fontSize: '14px' }}>
-            All-time profits and losses across all sessions. Players with 🔒 have hidden their stats.
+            All-time profits and losses across all sessions. Players with private status have hidden their stats.
           </p>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default function Leaderboard() {
             <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', marginBottom: '32px', flexWrap: 'wrap' }}>
               {[sorted[1], sorted[0], sorted[2]].map((p, podIdx) => {
                 if (!p) return null
-                const medal = podIdx === 0 ? '🥈' : podIdx === 1 ? '🥇' : '🥉'
+                const medal = podIdx === 0 ? '2nd' : podIdx === 1 ? '1st' : '3rd'
                 const heights = [120, 160, 100]
                 return (
                   <div key={p.userId} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px', width: '140px' }}>
@@ -94,10 +94,10 @@ export default function Leaderboard() {
                     <div style={{ textAlign: 'center' }}>
                       <div style={{ fontFamily: 'var(--font-display)', fontWeight: '800', fontSize: '14px' }}>{p.username}</div>
                       <div style={{ fontFamily: 'var(--font-display)', fontWeight: '900', fontSize: '18px', color: p.isPrivate && p.userId !== user._id ? 'var(--text-muted)' : p.totalProfit >= 0 ? '#22c55e' : '#ef4444', marginTop: '4px' }}>
-                        {p.isPrivate && p.userId !== user._id ? '🔒' : (p.totalProfit >= 0 ? '+' : '') + formatINR(p.totalProfit)}
+                        {p.isPrivate && p.userId !== user._id ? 'Private' : (p.totalProfit >= 0 ? '+' : '') + formatINR(p.totalProfit)}
                       </div>
                     </div>
-                    <div style={{ background: podIdx === 1 ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.04)', border: `1px solid ${podIdx === 1 ? 'rgba(201,168,76,0.4)' : 'var(--border-subtle)'}`, borderRadius: 'var(--radius-md)', padding: '8px 16px', textAlign: 'center', width: '100%', height: `${heights[podIdx]}px`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '32px' }}>
+                    <div style={{ background: podIdx === 1 ? 'rgba(201,168,76,0.15)' : 'rgba(255,255,255,0.04)', border: `1px solid ${podIdx === 1 ? 'rgba(201,168,76,0.4)' : 'var(--border-subtle)'}`, borderRadius: 'var(--radius-md)', padding: '8px 16px', textAlign: 'center', width: '100%', height: `${heights[podIdx]}px`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', fontFamily: 'var(--font-display)', fontWeight: '800', color: 'var(--color-gold)' }}>
                       {medal}
                     </div>
                   </div>
@@ -128,7 +128,7 @@ export default function Leaderboard() {
                       <tr key={p.userId} style={{ background: isMe ? 'rgba(201,168,76,0.04)' : 'transparent' }}>
                         <td className="rank-cell">
                           <span className={i < 3 ? `rank-${i + 1}` : ''}>
-                            {i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `#${i + 1}`}
+                            {i === 0 ? '1st' : i === 1 ? '2nd' : i === 2 ? '3rd' : `#${i + 1}`}
                           </span>
                         </td>
                         <td>
@@ -139,17 +139,17 @@ export default function Leaderboard() {
                             <div style={{ fontFamily: 'var(--font-display)', fontWeight: '700', fontSize: '14px' }}>
                               {p.username}
                               {isMe && <span style={{ color: 'var(--color-gold)', fontSize: '11px', marginLeft: '6px' }}>You</span>}
-                              {p.isPrivate && <span style={{ fontSize: '12px', marginLeft: '4px' }}>🔒</span>}
+                              {p.isPrivate && <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginLeft: '6px' }}>(Private)</span>}
                             </div>
                           </div>
                         </td>
                         <td style={{ textAlign: 'right', fontFamily: 'var(--font-display)', fontWeight: '800', fontSize: '16px', color: p.isPrivate && !isMe ? 'var(--text-muted)' : p.totalProfit >= 0 ? '#22c55e' : '#ef4444' }}>
-                          {p.isPrivate && !isMe ? '—' : (p.totalProfit >= 0 ? '+' : '') + formatINR(p.totalProfit)}
+                          {p.isPrivate && !isMe ? '-' : (p.totalProfit >= 0 ? '+' : '') + formatINR(p.totalProfit)}
                         </td>
                         <td style={{ textAlign: 'center', color: 'var(--text-secondary)' }}>{p.sessionsPlayed}</td>
                         <td style={{ textAlign: 'center', color: '#22c55e', fontFamily: 'var(--font-display)', fontWeight: '700' }}>{p.sessionsWon}</td>
                         <td style={{ textAlign: 'center', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)', fontSize: '13px' }}>
-                          {p.sessionsPlayed ? `${winRate}%` : '—'}
+                          {p.sessionsPlayed ? `${winRate}%` : '-'}
                         </td>
                       </tr>
                     )

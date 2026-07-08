@@ -16,7 +16,9 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(
   res => res,
   err => {
-    if (err.response?.status === 401) {
+    // Only auto-redirect on 401 if user already had a stored token
+    // (i.e. a logged-in session expired). Don't redirect during login/register.
+    if (err.response?.status === 401 && localStorage.getItem('poker_token')) {
       localStorage.removeItem('poker_token')
       window.location.href = '/login'
     }

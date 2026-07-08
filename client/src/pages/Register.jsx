@@ -39,7 +39,6 @@ export default function Register() {
     }
   }
 
-  const avatarColors = ['#c9a84c', '#8b1c1c', '#1a6b3a', '#2d5a9e', '#7c3aed', '#c2410c', '#0e7490', '#b45309']
   const preview = form.username?.charAt(0)?.toUpperCase() || '?'
 
   return (
@@ -48,7 +47,7 @@ export default function Register() {
       <div className="auth-card card animate-in" style={{ maxWidth: '480px' }}>
         <div className="card-body">
           <div className="auth-header">
-            <span className="auth-logo">🎴</span>
+            <span className="auth-logo" style={{ fontFamily: 'var(--font-display)', fontSize: '40px', color: 'var(--color-gold)', textShadow: '0 0 20px rgba(201,168,76,0.5)' }}>♠</span>
             <h1 className="auth-title">Join the Table</h1>
             <p className="auth-subtitle">Create your PokerStack account</p>
           </div>
@@ -62,7 +61,7 @@ export default function Register() {
 
           {serverError && (
             <div style={{ padding: '12px 16px', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 'var(--radius-md)', color: '#ef4444', fontSize: '14px', marginBottom: '20px', fontFamily: 'var(--font-display)', fontWeight: '600' }}>
-              ✕ {serverError}
+              {serverError}
             </div>
           )}
 
@@ -79,7 +78,7 @@ export default function Register() {
                 onChange={handleChange}
                 maxLength={20}
               />
-              {errors.username && <p className="form-error">✕ {errors.username}</p>}
+              {errors.username && <p className="form-error">{errors.username}</p>}
             </div>
 
             <div className="form-group">
@@ -93,7 +92,7 @@ export default function Register() {
                 value={form.email}
                 onChange={handleChange}
               />
-              {errors.email && <p className="form-error">✕ {errors.email}</p>}
+              {errors.email && <p className="form-error">{errors.email}</p>}
             </div>
 
             <div className="form-group">
@@ -107,7 +106,7 @@ export default function Register() {
                 value={form.password}
                 onChange={handleChange}
               />
-              {errors.password && <p className="form-error">✕ {errors.password}</p>}
+              {errors.password && <p className="form-error">{errors.password}</p>}
             </div>
 
             <div className="form-group">
@@ -121,18 +120,18 @@ export default function Register() {
                 value={form.confirm}
                 onChange={handleChange}
               />
-              {errors.confirm && <p className="form-error">✕ {errors.confirm}</p>}
+              {errors.confirm && <p className="form-error">{errors.confirm}</p>}
             </div>
 
             <button type="submit" className="btn btn-primary w-full" style={{ marginTop: '8px' }} disabled={loading}>
-              {loading ? '🔄 Creating account...' : '♠ Join PokerStack'}
+              {loading ? 'Creating account...' : 'Join PokerStack'}
             </button>
           </form>
 
           <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '14px', color: 'var(--text-secondary)' }}>
             Already have an account?{' '}
             <Link to="/login" style={{ color: 'var(--color-gold)', fontWeight: '700', fontFamily: 'var(--font-display)' }}>
-              Login ♠
+              Login
             </Link>
           </div>
         </div>
