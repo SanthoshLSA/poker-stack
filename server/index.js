@@ -5,20 +5,40 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-// Enable dynamic CORS for all origins, allowing methods, headers and credentials
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allows any origin (reflection) and handles credentials
-    callback(null, true);
-  },
-  credentials: true,
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Express parser middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Cache database connection for Serverless Functions
+let isConnected = false;
+const connectDB = async () => {
+  if (isConnected) return;
+  try {
+    const db = await mongoose.connect(process.env.MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000 // 5 seconds timeout instead of hanging
+    });
+    isConnected = db.connections[0].readyState === 1;
+    console.log('Connected to MongoDB');
+  } catch (err) {
+    console.error('Database connection failed:', err.message);
+    throw err;
+  }
+};
+
+// Middleware to ensure DB connection per request (ideal for Serverless)
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    res.status(500).json({ error: 'Database connection failed. Please check MONGODB_URI.' });
+  }
+});
 
 const authRoutes = require('./routes/auth');
 const groupRoutes = require('./routes/groups');
@@ -30,32 +50,15 @@ app.use('/api/groups', groupRoutes);
 app.use('/api/sessions', sessionRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 
-// Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', time: new Date().toISOString() });
+  res.json({ status: 'ok', database: isConnected ? 'connected' : 'disconnected' });
 });
 
-// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
     error: err.message || 'Internal Server Error'
   });
 });
-
-// Connect to MongoDB and start server
-const PORT = process.env.PORT || 5000;
-
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log('✅ Connected to MongoDB');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error('❌ MongoDB connection error:', err.message);
-    process.exit(1);
-  });
 
 module.exports = app;
