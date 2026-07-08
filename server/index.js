@@ -1,26 +1,31 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
 
 const app = express();
 
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// Custom CORS middleware to guarantee all headers are correctly applied
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+  
+  // Instantly handle OPTIONS preflight requests
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  next();
+});
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Cache database connection for Serverless Functions
 let isConnected = false;
 const connectDB = async () => {
   if (isConnected) return;
   try {
     const db = await mongoose.connect(process.env.MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000 // 5 seconds timeout instead of hanging
+      serverSelectionTimeoutMS: 5000
     });
     isConnected = db.connections[0].readyState === 1;
     console.log('Connected to MongoDB');
@@ -30,13 +35,12 @@ const connectDB = async () => {
   }
 };
 
-// Middleware to ensure DB connection per request (ideal for Serverless)
 app.use(async (req, res, next) => {
   try {
     await connectDB();
     next();
   } catch (err) {
-    res.status(500).json({ error: 'Database connection failed. Please check MONGODB_URI.' });
+    res.status(500).json({ error: 'Database connection failed. Check MONGODB_URI.' });
   }
 });
 
