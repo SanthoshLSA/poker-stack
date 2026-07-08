@@ -4,8 +4,21 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+
+// Enable dynamic CORS for all origins, allowing methods, headers and credentials
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allows any origin (reflection) and handles credentials
+    callback(null, true);
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']
+}));
+
+// Express parser middleware
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
 
 const authRoutes = require('./routes/auth');
 const groupRoutes = require('./routes/groups');
