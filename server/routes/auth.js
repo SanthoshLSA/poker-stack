@@ -14,35 +14,28 @@ const generateToken = (id) => {
 router.post('/register', async (req, res) => {
   try {
     const { username, email, password } = req.body;
-
     if (!username || !email || !password) {
       return res.status(400).json({ error: 'All fields are required' });
     }
-    if (password.length < 6) {
-      return res.status(400).json({ error: 'Password must be at least 6 characters' });
-    }
-    if (username.length < 3 || username.length > 20) {
-      return res.status(400).json({ error: 'Username must be 3-20 characters' });
-    }
-    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-      return res.status(400).json({ error: 'Username can only contain letters, numbers, and underscores' });
-    }
 
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+    const existingUser = await User.findOne({ 
+      $or: [{ email: email.toLowerCase() }, { username }] 
+    });
     if (existingUser) {
-      if (existingUser.email === email.toLowerCase()) {
-        return res.status(409).json({ error: 'Email already in use' });
-      }
-      return res.status(409).json({ error: 'Username already taken' });
+      return res.status(400).json({ error: 'User already exists' });
     }
 
-    const passwordHash = await bcrypt.hash(password, 12);
-    const user = await User.create({ username, email, passwordHash });
+    // Use 10 rounds of bcrypt hash for optimal serverless execution speed
+    const passwordHash = await bcrypt.hash(password, 10);
+    const user = await User.create({
+      username,
+      email: email.toLowerCase(),
+      passwordHash
+    });
 
     const token = generateToken(user._id);
     res.status(201).json({ token, user: user.toPublicJSON() });
   } catch (err) {
-    console.error('Register error:', err);
     res.status(500).json({ error: 'Server error during registration' });
   }
 });
@@ -125,7 +118,7 @@ router.patch('/change-password', protect, async (req, res) => {
       return res.status(401).json({ error: 'Current password is incorrect' });
     }
 
-    user.passwordHash = await bcrypt.hash(newPassword, 12);
+    user.passwordHash = await bcrypt.hash(newPassword, 10);
     await user.save();
     res.json({ message: 'Password changed successfully' });
   } catch (err) {
